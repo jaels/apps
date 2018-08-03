@@ -2,12 +2,13 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { KeyringPair, KeyringPair$Meta } from '@polkadot/util-keyring/types';
+import { KeyringPair, KeyringPair$Json, KeyringPair$Meta } from '@polkadot/util-keyring/types';
 import { KeyringAddress, KeyringInstance, KeyringOption$Type, KeyringOption, KeyringOptions, State } from './types';
 
 import testKeyring from '@polkadot/util-keyring/testing';
 
 import loadAll from './loadAll';
+import addFromJson from './account/restore';
 import createAccount from './account/create';
 import forgetAccount from './account/forget';
 import isAvailable from './isAvailable';
@@ -34,6 +35,8 @@ const state: State = {
 loadAll(state);
 
 export default ({
+  addFromJson: (json: KeyringPair$Json): void =>
+    addFromJson(state, json),
   createAccount: (seed: Uint8Array, password?: string, meta?: KeyringPair$Meta): KeyringPair =>
     createAccount(state, seed, password, meta),
   forgetAccount: (address: string): void =>
