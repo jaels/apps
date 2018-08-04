@@ -8,7 +8,7 @@ import { KeyringAddress, KeyringInstance, KeyringOption$Type, KeyringOption, Key
 import testKeyring from '@polkadot/util-keyring/testing';
 
 import loadAll from './loadAll';
-import addFromJson from './account/restore';
+import backupAccount from './account/backup';
 import createAccount from './account/create';
 import forgetAccount from './account/forget';
 import isAvailable from './isAvailable';
@@ -18,10 +18,10 @@ import forgetAddress from './address/forget';
 import getAccounts from './account/all';
 import getAddress from './address/get';
 import getAddresses from './address/all';
+import restoreAccount from './account/restore';
 import saveAddress from './address/meta';
 import saveRecent from './address/metaRecent';
 import setTestMode from './setTestMode';
-import toJson from './account/backup';
 
 const state: State = {
   isTestMode: false,
@@ -36,8 +36,8 @@ const state: State = {
 loadAll(state);
 
 export default ({
-  addFromJson: (json: KeyringPair$Json): void =>
-    addFromJson(state, json),
+  backupAccount: (address: string, passphrase?: string): KeyringPair$Json | void =>
+    backupAccount(state, address, passphrase),
   createAccount: (seed: Uint8Array, password?: string, meta?: KeyringPair$Meta): KeyringPair =>
     createAccount(state, seed, password, meta),
   forgetAccount: (address: string): void =>
@@ -62,6 +62,8 @@ export default ({
     ),
   loadAll: (): void =>
     loadAll(state),
+  restoreAccount: (json: KeyringPair$Json, passphrase?: string): void =>
+    restoreAccount(state, json, passphrase),
   saveAccount: (pair: KeyringPair, password?: string): void =>
     saveAccount(state, pair, password),
   saveAccountMeta: (pair: KeyringPair, meta: KeyringPair$Meta): void =>
@@ -71,7 +73,5 @@ export default ({
   saveRecent: (address: string): KeyringOption =>
     saveRecent(state, address),
   setTestMode: (isTest: boolean): void =>
-    setTestMode(state, isTest),
-  toJson: (address: string, passphrase?: string): KeyringPair$Json | void =>
-    toJson(state, address, passphrase)
+    setTestMode(state, isTest)
 } as KeyringInstance);
