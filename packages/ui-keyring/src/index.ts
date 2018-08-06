@@ -6,6 +6,7 @@ import { KeyringPair, KeyringPair$Json, KeyringPair$Meta } from '@polkadot/util-
 import { KeyringAddress, KeyringInstance, KeyringOption$Type, KeyringOption, KeyringOptions, State } from './types';
 
 import testKeyring from '@polkadot/util-keyring/testing';
+import hexToU8a from '@polkadot/util/hex/toU8a';
 
 import loadAll from './loadAll';
 import backupAccount from './account/backup';
@@ -36,6 +37,8 @@ const state: State = {
 loadAll(state);
 
 export default ({
+  addFromJson: ({ address, encoded, meta }: KeyringPair$Json): KeyringPair =>
+    state.keyring.addFromAddress(address, meta, hexToU8a(encoded)),
   backupAccount: (address: string, passphrase: string): KeyringPair$Json | void =>
     backupAccount(state, address, passphrase),
   createAccount: (seed: Uint8Array, password?: string, meta?: KeyringPair$Meta): KeyringPair =>
